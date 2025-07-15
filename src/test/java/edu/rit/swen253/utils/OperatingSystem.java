@@ -17,7 +17,20 @@ public enum OperatingSystem {
    *
    * @throws IllegalArgumentException  if the OS is not recognized
    */
-  public static OperatingSystem discover() {
+  public static synchronized OperatingSystem discover() {
+    if (cachedOS == null) {
+      cachedOS = _discover();
+    }
+    return cachedOS;
+  }
+  private static volatile OperatingSystem cachedOS;
+
+  /**
+   * Private implementation of the OS discovery process.
+   * Pulled-out to make it easier to see the caching code in the
+   * public {@link #discover()} method.
+   */
+  private static OperatingSystem _discover() {
     final String osName = System.getProperty("os.name");
     if (osName.startsWith("Windows")) {
       return WINDOWS;

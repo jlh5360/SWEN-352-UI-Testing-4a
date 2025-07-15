@@ -51,7 +51,7 @@ public class RatingInfoView {
     if (!scrolledAlready) {
       switch (BrowserType.discover()) {
         case CHROME, EDGE -> viewContainer.scrollIntoView();
-        case FIREFOX, SAFARI -> SeleniumUtils.makeAction().scrollByAmount(0, 2000).perform();
+        case FIREFOX, SAFARI -> SeleniumUtils.getInstance().makeAction().scrollByAmount(0, 2000).perform();
       }
       scrolledAlready = true;
     }

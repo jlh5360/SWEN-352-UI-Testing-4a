@@ -23,11 +23,15 @@ public enum ScreenMode {
    *
    * @throws IllegalArgumentException  if the ScreenMode is not recognized
    */
-  public static ScreenMode discover() {
-    return Optional.ofNullable(System.getProperty("screenMode"))
-      .map(ScreenMode::valueOf)
-      .orElse(ScreenMode.DESKTOP);
+  public static synchronized ScreenMode discover() {
+    if (cachedScreenMode == null) {
+      cachedScreenMode = Optional.ofNullable(System.getProperty("screenMode"))
+        .map(ScreenMode::valueOf)
+        .orElse(ScreenMode.DESKTOP);
+    }
+    return cachedScreenMode;
   }
+  private static volatile ScreenMode cachedScreenMode;
 
   public Dimension getScreenSize() {
     return screenSize;

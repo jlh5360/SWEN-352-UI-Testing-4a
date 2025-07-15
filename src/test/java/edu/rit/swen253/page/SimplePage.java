@@ -14,13 +14,13 @@ public class SimplePage extends AbstractPage {
    * Get the web page title.
    */
   public String getTitle() {
-    return SeleniumUtils.getDriver().getTitle();
+    return SeleniumUtils.getInstance().getTitle();
   }
 
   /**
    * Get the web page URL.
    */
   public String getURL() {
-    return SeleniumUtils.getDriver().getCurrentUrl();
+    return SeleniumUtils.getInstance().getCurrentUrl();
   }
 }

@@ -19,7 +19,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 @TestInstance(Lifecycle.PER_CLASS)
 public abstract class AbstractWebTest {
 
+  private final SeleniumUtils seleniumUtils;
+
   protected AbstractWebTest() {
+    seleniumUtils = SeleniumUtils.getInstance();
   }
 
   //
@@ -38,7 +41,7 @@ public abstract class AbstractWebTest {
       "%1$tb %1$td, %1$tY %1$tl:%1$tM:%1$tS %1$Tp %2$s %4$s: %5$s%n"
     );
     // setup and build Selenium driver
-    SeleniumUtils.setupDriver();
+    seleniumUtils.setupDriver();
   }
 
   /**
@@ -46,7 +49,7 @@ public abstract class AbstractWebTest {
    */
   @AfterAll
   public final void tearDown() {
-    SeleniumUtils.shutdownDriver();
+    seleniumUtils.shutdownDriver();
   }
 
   //
@@ -61,7 +64,7 @@ public abstract class AbstractWebTest {
    * @return the Page Object
    */
   protected <P extends AbstractPage> P navigateToPage(final String pageURL, final PageFactory<P> pageFactory) {
-    return SeleniumUtils.navigateToPage(pageURL, pageFactory);
+    return seleniumUtils.navigateToPage(pageURL, pageFactory);
   }
 
   /**

@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 
@@ -48,7 +49,7 @@ public class DomElement implements WebElement {
    *   when the driver fails to find an element at the location
    */
   public static DomElement findBy(final By by) {
-    return new DomElement(SeleniumUtils.getShortWait().until(driver -> driver.findElement(by)));
+    return new DomElement(SeleniumUtils.getInstance().getShortWait().until(driver -> driver.findElement(by)));
   }
 
   /**
@@ -61,7 +62,7 @@ public class DomElement implements WebElement {
    * @return The list of {@link DomElement} objects created for this finder.
    */
   public static List<DomElement> findAllBy(final By by) {
-    return SeleniumUtils.getShortWait()
+    return SeleniumUtils.getInstance().getShortWait()
         .until(driver -> driver.findElements(by))
         .stream()
         .map(DomElement::new)
@@ -81,20 +82,15 @@ public class DomElement implements WebElement {
   // Constructor
   //
 
+  /**
+   * The ctor is kept private, which forces client code to use either
+   * the static factory methods, {@link DomElement#findElement(By)} and so on,
+   * or finder methods on another instance, such as {@link #findChildBy(By)} and so on.
+   *
+   * @param element  the Selenium {@link WebElement} that is being decorated
+   */
   private DomElement(final WebElement element) {
     this.element = element;
-  }
-
-  //
-  // Public methods
-  //
-
-  /**
-   * Get the wrapped Selenium {@link  WebElement}.  This allows client code to execute any
-   * sort of action directly on the element; by-passing this decorator.
-   */
-  public WebElement getWebElement() {
-    return element;
   }
 
   //
@@ -112,7 +108,7 @@ public class DomElement implements WebElement {
    */
   @Override
   public void click() {
-    click(SeleniumUtils.getShortWait(), ExpectedConditions::elementToBeClickable);
+    click(SeleniumUtils.getInstance().getShortWait(), ExpectedConditions::elementToBeClickable);
   }
 
   /**
@@ -297,6 +293,14 @@ public class DomElement implements WebElement {
   //
 
   /**
+   * Get the wrapped Selenium {@link  WebElement}.  This allows client code to execute any
+   * sort of action directly on the element; by-passing this decorator.
+   */
+  public WebElement getWebElement() {
+    return element;
+  }
+
+  /**
    * Get the full text of this element but trimmed and extraneous whitespace removed.
    */
   public String getTrimmedText() {
@@ -331,7 +335,7 @@ public class DomElement implements WebElement {
    *   when the driver fails to find an element at the location
    */
   public DomElement findChildBy(By by) {
-    return new DomElement(SeleniumUtils.getShortWait().until(driver -> element.findElement(by)));
+    return new DomElement(SeleniumUtils.getInstance().getShortWait().until(driver -> element.findElement(by)));
   }
 
   /**
@@ -351,7 +355,7 @@ public class DomElement implements WebElement {
    *   when the driver fails to find an element at the location
    */
   public DomElement findChildInShadowDom(By by) {
-    return new DomElement(SeleniumUtils.getShortWait().until(driver -> element.getShadowRoot().findElement(by)));
+    return new DomElement(SeleniumUtils.getInstance().getShortWait().until(driver -> element.getShadowRoot().findElement(by)));
   }
 
   /**
@@ -366,7 +370,7 @@ public class DomElement implements WebElement {
    *   when the driver fails to find an element at the location
    */
   public List<DomElement> findChildrenBy(By by) {
-    return SeleniumUtils.getMediumWait()
+    return SeleniumUtils.getInstance().getMediumWait()
       .until(driver -> element.findElements(by))
       .stream()
       .map(DomElement::new)
@@ -391,11 +395,24 @@ public class DomElement implements WebElement {
    *   when the driver fails to find an element at the location
    */
   public List<DomElement> findChildrenInShadowDom(By by) {
-    return SeleniumUtils.getShortWait()
+    return SeleniumUtils.getInstance().getShortWait()
       .until(driver -> element.getShadowRoot().findElements(by))
       .stream()
       .map(DomElement::new)
       .toList();
+  }
+
+  /**
+   * Perform an action on the current DOM element and then return this element.
+   * This functional API is used in a chain of finder methods for performing actions
+   * on intermediate DOM nodes in the search.
+   *
+   * @param action  a {@link Consumer} function on the current DOM element
+   * @return  the same DOM element
+   */
+  public DomElement doWith(Consumer<DomElement> action) {
+    action.accept(this);
+    return this;
   }
 
   /**
@@ -433,14 +450,14 @@ public class DomElement implements WebElement {
    * Puts focus on a text field.
    */
   public void focus() {
-    SeleniumUtils.executeScript("arguments[0].focus(); return true", this.element);
+    SeleniumUtils.getInstance().executeScript("arguments[0].focus(); return true", this.element);
   }
 
   /**
    * Blurs away from a text field.
    */
   public void blur() {
-    SeleniumUtils.executeScript("arguments[0].blur(); return true", this.element);
+    SeleniumUtils.getInstance().executeScript("arguments[0].blur(); return true", this.element);
   }
 
   /**
@@ -463,14 +480,14 @@ public class DomElement implements WebElement {
    * Scroll the browser page to make this DOM element visible.
    */
   public void scrollIntoView() {
-    SeleniumUtils.makeAction().scrollToElement(element).perform();
+    SeleniumUtils.getInstance().makeAction().scrollToElement(element).perform();
   }
 
   /**
    * Wait until this element has vanished from the page.
    */
   public void waitUntilGone() {
-    waitUntilGone(SeleniumUtils.getShortWait());
+    waitUntilGone(SeleniumUtils.getInstance().getShortWait());
   }
 
   /**

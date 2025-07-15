@@ -17,7 +17,9 @@ This section provides a sketch of how to install the Google Chrome browser drive
 
 To install Chrome [click here](https://www.google.com/chrome/dr/download)
 
-To install Chrome driver [click here](https://developer.chrome.com/docs/chromedriver/downloads)
+To install Chrome driver:
+* [Latest versions](https://googlechromelabs.github.io/chrome-for-testing/)
+* [Older versions](https://developer.chrome.com/docs/chromedriver/downloads)
 
 Also see:
  * [ChromeDriver docs](https://developer.chrome.com/docs/chromedriver)

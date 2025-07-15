@@ -137,11 +137,15 @@ public enum BrowserType {
    *
    * @throws IllegalArgumentException  if the BrowserType is not recognized
    */
-  public static BrowserType discover() {
-    return Optional.ofNullable(System.getProperty("browserType"))
-      .map(BrowserType::valueOf)
-      .orElse(BrowserType.CHROME);
+  public static synchronized BrowserType discover() {
+    if (cachedBrowser == null) {
+      cachedBrowser = Optional.ofNullable(System.getProperty("browserType"))
+        .map(BrowserType::valueOf)
+        .orElse(BrowserType.CHROME);
+    }
+    return cachedBrowser;
   }
+  private static volatile BrowserType cachedBrowser;
 
   /**
    * Query whether the current browser matches the specified browser.

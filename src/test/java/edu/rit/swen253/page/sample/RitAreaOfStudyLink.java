@@ -1,8 +1,6 @@
 package edu.rit.swen253.page.sample;
 
-import edu.rit.swen253.utils.BrowserType;
 import edu.rit.swen253.utils.DomElement;
-import edu.rit.swen253.utils.SeleniumUtils;
 import org.openqa.selenium.By;
 
 import java.util.List;
@@ -50,11 +48,6 @@ public class RitAreaOfStudyLink {
    * Navigate to this 'Area of Study' by clicking the link.
    */
   public void clickLink() {
-    scrollIntoView();
-    // still not 'in view' due to the 'Cookies Setting' panel at the bottom of the screen
-    // so scroll up a little more...
-    SeleniumUtils.makeAction().scrollByAmount(0, 200).perform();
-    // now the click action will work
     link.click();
   }
 
@@ -64,7 +57,6 @@ public class RitAreaOfStudyLink {
    */
   public String getFirstIconName() {
     if (firstIconName == null) {
-      scrollIntoView();
       firstIconName = extractFontName(By.xpath("span[1]"));
     }
     return firstIconName;
@@ -76,7 +68,6 @@ public class RitAreaOfStudyLink {
    */
   public String getSecondIconName() {
     if (secondIconName == null) {
-      scrollIntoView();
       secondIconName = extractFontName(By.xpath("span[2]"));
     }
     return secondIconName;
@@ -86,23 +77,12 @@ public class RitAreaOfStudyLink {
    * Extract the title of the 'Area of Study' link.
    */
   public String getTitle() {
-    scrollIntoView();
     return link.findChildBy(By.cssSelector("div.field--name-name")).getText();
   }
 
   //
   // Private
   //
-  private void scrollIntoView() {
-    if (!scrolledAlready) {
-      switch (BrowserType.discover()) {
-        case CHROME, EDGE -> link.scrollIntoView();
-        case FIREFOX, SAFARI -> SeleniumUtils.makeAction().scrollByAmount(0, 2700).perform();
-      }
-      scrolledAlready = true;
-    }
-  }
-  private static boolean scrolledAlready = false;
 
   private String extractFontName(final By fontSpanFinder) {
     final DomElement firstFontAwesomeSpan = viewContainer

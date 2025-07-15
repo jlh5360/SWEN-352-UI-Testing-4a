@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RitRatingsTest extends AbstractWebTest {
 
   private RitHomePage homePage;
-  private RatingInfoView firstRatingInfo;
+  private RatingInfoView coopRatingInfo;
 
   //
   // Test sequence
@@ -40,16 +40,16 @@ class RitRatingsTest extends AbstractWebTest {
     final List<RatingInfoView> ratingInfoViews = homePage.getRatingViews();
     assertEquals(3, ratingInfoViews.size(), "Number of views should be 3");
     // prepare for the next test
-    firstRatingInfo = ratingInfoViews.get(2);  // co-op rank is the third item
+    coopRatingInfo = ratingInfoViews.get(2);  // co-op rank is the third item
   }
 
   @Test
   @Order(3)
   @DisplayName("Third, inspect the content of the first rating info panel.")
-  void inspectFirstRatingInfo() {
+  void inspectCoopRatingInfo() {
     assertAll("group assertions"
-      , () -> assertEquals("#6", firstRatingInfo.getRating())
-      , () -> assertEquals("Top School for Co-op or Internship Programs", firstRatingInfo.getTitle())
+      , () -> assertEquals("#6", coopRatingInfo.getRating())
+      , () -> assertEquals("Top School for Co-op or Internship Programs", coopRatingInfo.getTitle())
     );
   }
 }

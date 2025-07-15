@@ -4,10 +4,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>edu.rit.swen352</groupId>
-  <artifactId>ui-testing-4a</artifactId>
+  <artifactId>UI-Testing-Basics</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>UI Tests: Searching</name>
+  <name>UI Tests: View Analysis and Selenium Basics</name>
   <description>
     UI Testing activity using Selenium and JUnit 5.
   </description>

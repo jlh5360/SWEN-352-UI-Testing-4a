@@ -23,25 +23,43 @@ import java.util.logging.Logger;
 public final class SeleniumUtils {
   private static final Logger logger = Logger.getLogger(SeleniumUtils.class.getName());
 
+  public static synchronized SeleniumUtils getInstance() {
+    if (instance == null) {
+      instance = new SeleniumUtils();
+    }
+    return instance;
+  }
+  private static volatile SeleniumUtils instance;
+
   /**
    * Set up the {@link WebDriver} into the Utilities class.  This <strong>must</strong> be called
    * by the {@link AbstractWebTest#setUpSeleniumDriver()} method to set up the standard
    * set of {@link FluentWait} objects.
    */
-  public static void setupDriver() {
+  public void setupDriver() {
+    // discover the three primary test properties
     final OperatingSystem operatingSystem = OperatingSystem.discover();
     final BrowserType browserType = BrowserType.discover();
     logger.info("Operating system: " + operatingSystem);
     logger.info("Browser: " + browserType);
     logger.info("Screen Mode: " + ScreenMode.discover());
+    // configure Selenium and build the Driver
     browserType.configureDriverExecutable(operatingSystem);
     theDriver = buildDriver();
-    shortWait = makeWait(SHORT_DELAY);
-    mediumWait = makeWait(MEDIUM_DELAY);
-    longWait = makeWait(LONG_DELAY);
+    // build common wait conditions
+    shortWait = makeWait(ONE_SECOND);
+    mediumWait = makeWait(FIVE_SECONDS);
+    longWait = makeWait(TEN_SECONDS);
   }
 
-  public static void shutdownDriver() {
+  /**
+   * Shutdown the Selenium driver. This is usually done in the
+   * {@code AfterAll} JUnit life cycle method.
+   * <p>
+   *   See: {@link AbstractWebTest#tearDown()}.
+   * </p>
+   */
+  public void shutdownDriver() {
     if (theDriver != null) {
       logger.info("Quiting the driver.");
       theDriver.quit();
@@ -50,33 +68,33 @@ public final class SeleniumUtils {
     }
   }
 
-  public static WebDriver getDriver() {
-    return theDriver;
-  }
-
-  public static <P extends AbstractPage> P navigateToPage(String url, PageFactory<P> pageFactory) {
+  public <P extends AbstractPage> P navigateToPage(String url, PageFactory<P> pageFactory) {
     theDriver.navigate().to(url);
     return pageFactory.createPage();
   }
 
-  public static String getCurrentUrl() {
+  public String getCurrentUrl() {
     return theDriver.getCurrentUrl();
   }
 
-  public static void refresh() {
+  public void refresh() {
     theDriver.navigate().refresh();
   }
 
-  public static FluentWait<WebDriver> getShortWait() {
-    return SeleniumUtils.shortWait;
+  public String getTitle() {
+    return theDriver.getTitle();
   }
 
-  public static FluentWait<WebDriver> getMediumWait() {
-    return SeleniumUtils.mediumWait;
+  public FluentWait<WebDriver> getShortWait() {
+    return shortWait;
   }
 
-  public static FluentWait<WebDriver> getLongWait() {
-    return SeleniumUtils.longWait;
+  public FluentWait<WebDriver> getMediumWait() {
+    return mediumWait;
+  }
+
+  public FluentWait<WebDriver> getLongWait() {
+    return longWait;
   }
 
   /**
@@ -85,7 +103,7 @@ public final class SeleniumUtils {
    * @param timeout the length of time to wait for the condition
    * @return a {@link FluentWait} operator that can be used for any condition
    */
-  public static FluentWait<WebDriver> makeWait(final Duration timeout) {
+  public FluentWait<WebDriver> makeWait(final Duration timeout) {
     return new FluentWait<>(theDriver)
       .withTimeout(timeout)
       .pollingEvery(Duration.ofMillis(SHORT_INTERVAL))
@@ -95,8 +113,16 @@ public final class SeleniumUtils {
   /**
    * Make a new {@link Actions} object from the test's Selenium driver.
    */
-  public static Actions makeAction() {
+  public Actions makeAction() {
     return new Actions(theDriver);
+  }
+
+  /**
+   * Perform a scroll down (Y-axis) action.
+   * @param deltaY  how many pixels down
+   */
+  public void scrollDown(final int deltaY) {
+    makeAction().scrollByAmount(0, deltaY).perform();
   }
 
   /**
@@ -105,8 +131,8 @@ public final class SeleniumUtils {
    * @param script  the JavaScript code, use "arguments[0]" to reference the element
    * @param element  the DOM element being referenced in the code
    */
-  public static void executeScript(final String script, final WebElement element) {
-    ((JavascriptExecutor)getDriver()).executeScript(script, element);
+  public void executeScript(final String script, final WebElement element) {
+    ((JavascriptExecutor)theDriver).executeScript(script, element);
   }
 
   //
@@ -116,38 +142,27 @@ public final class SeleniumUtils {
   /**
    * A short interval is half a second long (500ms).
    */
-  private static final int SHORT_INTERVAL = 500;
+  private final int SHORT_INTERVAL = 500;
 
-  /**
-   * A short wait delay is one second long.
-   */
-  private static final Duration SHORT_DELAY = Duration.ofSeconds(1);
+  private final Duration ONE_SECOND = Duration.ofSeconds(1);
+  private final Duration FIVE_SECONDS = Duration.ofSeconds(5);
+  private final Duration TEN_SECONDS = Duration.ofSeconds(10);
 
-  /**
-   * A delay wait is five second long.
-   */
-  private static final Duration MEDIUM_DELAY = Duration.ofSeconds(5);
-
-  /**
-   * A long wait delay is ten second long.
-   */
-  private static final Duration LONG_DELAY = Duration.ofSeconds(10);
-
-  private static FluentWait<WebDriver> shortWait;
-  private static FluentWait<WebDriver> mediumWait;
-  private static FluentWait<WebDriver> longWait;
+  private FluentWait<WebDriver> shortWait;
+  private FluentWait<WebDriver> mediumWait;
+  private FluentWait<WebDriver> longWait;
 
   /**
    * The {@link WebDriver} created for a single test run.
    */
-  private static WebDriver theDriver;
+  private WebDriver theDriver;
 
   /**
    * Initialize the driver depending upon the type of browser and system properties.
    *
    * @return WebDriver (ChromeDriver or FirefoxDriver)
    */
-  private static WebDriver buildDriver() {
+  private WebDriver buildDriver() {
     // create essential browser capabilities
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
@@ -160,9 +175,6 @@ public final class SeleniumUtils {
     //
     return driver;
   }
-
-  private static final Duration ONE_SECOND = Duration.ofSeconds(1);
-  private static final Duration TEN_SECONDS = Duration.ofSeconds(10);
 
 
   /* hide ctor to complete the Utility idiom */

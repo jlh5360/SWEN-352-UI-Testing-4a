@@ -40,10 +40,14 @@ class RitExploreStudiesInComputingTest extends AbstractWebTest {
   @Order(2)
   @DisplayName("Second, find out how many 'Area of Study' links are visible.")
   void exploreAreasOfStudy() {
+    // guard condition
+    Assumptions.assumeTrue(homePage != null,
+      "Failed to navigate to the RIT Home page.");
+
     final List<RitAreaOfStudyLink> studyLinks = homePage.getStudyLinks();
     assertEquals(12, studyLinks.size(), "Number of links should be 12");
 
-    // prepare for next test
+    // prepare for the next test
     Optional<RitAreaOfStudyLink> hasLink = studyLinks.stream()
       .filter(link -> link.getTitle().equals("Computing and Information Sciences"))
       .findFirst();
@@ -79,7 +83,7 @@ class RitExploreStudiesInComputingTest extends AbstractWebTest {
     // expect the Home page to go away
     homePage.waitUntilGone();
 
-    // expect navigation to the area of study page
+    // expect navigation to the 'area of study' page
     final SimplePage page = assertNewPage(SimplePage::new);
     // validate simple page content
     assertAll("group assertions"

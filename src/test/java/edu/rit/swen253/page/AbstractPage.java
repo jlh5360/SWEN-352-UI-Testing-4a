@@ -4,6 +4,8 @@ import edu.rit.swen253.utils.DomElement;
 import edu.rit.swen253.utils.HtmlUtils;
 import edu.rit.swen253.utils.SeleniumUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
 
 import java.util.List;
 
@@ -77,6 +79,18 @@ public abstract class AbstractPage {
    * </p>
    */
   public void waitUntilGone() {
-    pageBody.waitUntilGone(SeleniumUtils.getLongWait());
+    waitUntilGone(SeleniumUtils.getInstance().getLongWait());
+  }
+
+  /**
+   * Wait until the page has gone stale; meaning, the browser has navigated to a brand-new page.
+   * <p>
+   * If this succeeds then this Page Object should be discarded and a new one created.  Any actions
+   * on this page will result in Staleness exceptions.
+   * </p>
+   * @param waitTime  a custom wait condition
+   */
+  public void waitUntilGone(FluentWait<WebDriver> waitTime) {
+    pageBody.waitUntilGone(waitTime);
   }
 }
