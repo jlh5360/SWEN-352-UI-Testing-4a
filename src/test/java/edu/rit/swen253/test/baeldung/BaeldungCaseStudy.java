@@ -1,8 +1,6 @@
-package edu.rit.swen253.test.sample;
+package edu.rit.swen253.test.baeldung;
 
 import edu.rit.swen253.page.SimplePage;
-import edu.rit.swen253.page.sample.RitAreaOfStudyLink;
-import edu.rit.swen253.page.sample.RitHomePage;
 import edu.rit.swen253.test.AbstractWebTest;
 import org.junit.jupiter.api.*;
 
@@ -13,16 +11,14 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 /**
- * A simple test that explores RIT's area of study; 'Computing' in particular.
- *
- * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
+ * A test that performs a search on the Baeldung website and logs the result. 
+ * 
+ * @author Matthew Peck
  */
-@Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class RitExploreStudiesInComputingTest extends AbstractWebTest {
-
+class BaeldungCaseStudy extends AbstractWebTest {
+/* 
   private RitHomePage homePage;
   private RitAreaOfStudyLink linkToComputingStudies;
 
@@ -92,4 +88,5 @@ class RitExploreStudiesInComputingTest extends AbstractWebTest {
       , () -> assertEquals("https://www.rit.edu/study/computing-and-information-sciences", page.getURL())
     );
   }
+ */
 }
