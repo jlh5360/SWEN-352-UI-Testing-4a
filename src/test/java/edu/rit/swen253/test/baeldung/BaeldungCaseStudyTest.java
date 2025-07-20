@@ -1,6 +1,8 @@
 package edu.rit.swen253.test.baeldung;
 
 import edu.rit.swen253.page.SimplePage;
+import edu.rit.swen253.page.baeldung.BaeldungHomePage;
+import edu.rit.swen253.page.baeldung.SearchButton;
 import edu.rit.swen253.test.AbstractWebTest;
 import org.junit.jupiter.api.*;
 
@@ -10,6 +12,7 @@ import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * A test that performs a search on the Baeldung website and logs the result. 
@@ -17,10 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Matthew Peck
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class BaeldungCaseStudy extends AbstractWebTest {
-/* 
-  private RitHomePage homePage;
-  private RitAreaOfStudyLink linkToComputingStudies;
+class BaeldungCaseStudyTest extends AbstractWebTest {
+
+  private BaeldungHomePage homePage;
 
   //
   // Test sequence
@@ -28,28 +30,25 @@ class BaeldungCaseStudy extends AbstractWebTest {
 
   @Test
   @Order(1)
-  @DisplayName("First, navigate to the RIT Home page.")
+  @DisplayName("First, navigate to the Baeldung Home page.")
   void navigateToHomePage() {
-    homePage = navigateToPage("https://rit.edu", RitHomePage::new);
+    homePage = navigateToPage("https://www.baeldung.com/", BaeldungHomePage::new);
+    assertNotNull(homePage);
   }
 
   @Test
   @Order(2)
-  @DisplayName("Second, find out how many 'Area of Study' links are visible.")
-  void exploreAreasOfStudy() {
+  @DisplayName("Second, find search button.")
+  void findSearchButton() {
     // guard condition
     Assumptions.assumeTrue(homePage != null,
       "Failed to navigate to the RIT Home page.");
 
-    final List<RitAreaOfStudyLink> studyLinks = homePage.getStudyLinks();
-    assertEquals(12, studyLinks.size(), "Number of links should be 12");
-
-    // prepare for the next test
-    Optional<RitAreaOfStudyLink> hasLink = studyLinks.stream()
-      .filter(link -> link.getTitle().equals("Computing and Information Sciences"))
-      .findFirst();
-    hasLink.ifPresent(link -> linkToComputingStudies = link);
+    final SearchButton searchButton = homePage.getSearchButton();
+    assertEquals("search", searchButton.getTitle());
   }
+
+  /*
 
   @Test
   @Order(3)
