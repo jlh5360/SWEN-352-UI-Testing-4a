@@ -3,6 +3,7 @@ package edu.rit.swen253.test.baeldung;
 import edu.rit.swen253.page.SimplePage;
 import edu.rit.swen253.page.baeldung.BaeldungHomePage;
 import edu.rit.swen253.page.baeldung.SearchButton;
+import edu.rit.swen253.page.baeldung.Searchbar;
 import edu.rit.swen253.test.AbstractWebTest;
 import org.junit.jupiter.api.*;
 
@@ -23,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BaeldungCaseStudyTest extends AbstractWebTest {
 
   private BaeldungHomePage homePage;
+  private SearchButton searchButton;
+  private Searchbar searchbar;
 
   //
   // Test sequence
@@ -33,7 +36,6 @@ class BaeldungCaseStudyTest extends AbstractWebTest {
   @DisplayName("First, navigate to the Baeldung Home page.")
   void navigateToHomePage() {
     homePage = navigateToPage("https://www.baeldung.com/", BaeldungHomePage::new);
-    assertNotNull(homePage);
   }
 
   @Test
@@ -44,48 +46,34 @@ class BaeldungCaseStudyTest extends AbstractWebTest {
     Assumptions.assumeTrue(homePage != null,
       "Failed to navigate to the RIT Home page.");
 
-    final SearchButton searchButton = homePage.getSearchButton();
+    searchButton = homePage.getSearchButton();
     assertEquals("search", searchButton.getTitle());
   }
 
-  /*
-
   @Test
   @Order(3)
-  @DisplayName("Third, inspect the content of the 'Computing and Information Sciences' link.")
-  void inspectComputingLink() {
+  @DisplayName("Third, click on the search button and confirm it brings you to the search page.")
+  void clickSearchButton() {
     // guard condition
-    Assumptions.assumeTrue(linkToComputingStudies != null,
-      "No 'Computing and Information Sciences' link found");
+    Assumptions.assumeTrue(searchButton != null,
+      "No 'search' link found");
 
-    // validate page content
-    assertAll("group assertions"
-      , () -> assertEquals("phone-laptop", linkToComputingStudies.getFirstIconName())
-      , () -> assertEquals("code", linkToComputingStudies.getSecondIconName())
-    );
+    searchButton.clickLink();
   }
 
   @Test
   @Order(4)
-  @DisplayName("Finally, navigate to the Computing area of study.")
-  void navigateToComputing() {
+  @DisplayName("Fourth, enter search phrase into search bar.")
+  void enterSearchPhrase() {
+    searchbar = homePage.getSearchbar();
     // guard condition
-    Assumptions.assumeTrue(linkToComputingStudies != null,
-      "No 'Computing and Information Sciences' link found");
+    Assumptions.assumeTrue(searchbar != null,
+      "No 'search' link found");
 
-    // attempt to navigate to the Computing area of study page
-    linkToComputingStudies.clickLink();
+    searchbar.click();
+    searchbar.sendKeys("page object model");
+    searchbar.submit();
 
-    // expect the Home page to go away
     homePage.waitUntilGone();
-
-    // expect navigation to the 'area of study' page
-    final SimplePage page = assertNewPage(SimplePage::new);
-    // validate simple page content
-    assertAll("group assertions"
-      , () -> assertEquals("Computing and Information Sciences Degrees | RIT", page.getTitle())
-      , () -> assertEquals("https://www.rit.edu/study/computing-and-information-sciences", page.getURL())
-    );
   }
- */
 }

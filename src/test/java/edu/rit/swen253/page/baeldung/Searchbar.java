@@ -1,7 +1,30 @@
 package edu.rit.swen253.page.baeldung;
 
-public class Searchbar {
+import edu.rit.swen253.utils.DomElement;
+
+
     /*
      * <input name="s" id="search" placeholder="Search" value="" class="form-control" type="text">
      */
+public class Searchbar {
+
+    private final DomElement viewContainer;
+    /**
+    * The View container is the input that contains the search.
+    */
+    public Searchbar(final DomElement viewContainer) {
+        this.viewContainer = viewContainer;
+    }
+
+    public void click() {
+        viewContainer.click();
+    }
+
+    public void sendKeys(String input) {
+        viewContainer.sendKeys(input);
+    }
+
+    public void submit() {
+        viewContainer.submit();
+    }
 }

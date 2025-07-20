@@ -1,7 +1,6 @@
 package edu.rit.swen253.page.baeldung;
 
 import edu.rit.swen253.utils.DomElement;
-import org.openqa.selenium.By;
 
 import static edu.rit.swen253.utils.HtmlUtils.ANCHOR_FINDER;
 
@@ -15,13 +14,11 @@ import static edu.rit.swen253.utils.HtmlUtils.ANCHOR_FINDER;
      * </a>
      */
 public class SearchButton {
-    private final DomElement viewContainer;
     private final DomElement link;
     /**
     * The View container is the li that holds the link {@code <li><a> ...LINK... </a></li>}.
     */
     public SearchButton(final DomElement viewContainer) {
-        this.viewContainer = viewContainer;
         this.link = viewContainer.findChildBy(ANCHOR_FINDER);
     }
 
@@ -29,7 +26,6 @@ public class SearchButton {
         link.click();
     }
 
-    // Not working at the moment, will fix later
     public String getTitle() {
         return link.getAttribute("title");
     }
