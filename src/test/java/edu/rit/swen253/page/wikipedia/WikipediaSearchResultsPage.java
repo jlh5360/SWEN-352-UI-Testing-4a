@@ -3,7 +3,6 @@ package edu.rit.swen253.page.wikipedia;
 import edu.rit.swen253.page.AbstractPage;
 import edu.rit.swen253.utils.DomElement;
 
-import org.checkerframework.checker.units.qual.A;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 
