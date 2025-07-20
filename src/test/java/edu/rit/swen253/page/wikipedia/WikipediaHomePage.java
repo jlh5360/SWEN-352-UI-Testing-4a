@@ -29,30 +29,30 @@ public class WikipediaHomePage extends AbstractPage {
     }
 
     //Navigates to the Wikipedia Home page
-    //Returns a new instance of WikipediaHomePage
     public static WikipediaHomePage navigateTo() {
+        //Returns a new instance of WikipediaHomePage
         return SeleniumUtils.getInstance().navigateToPage(WIKIPEDIA_URL, WikipediaHomePage::new);
     }
     
     //Enters a search phrase into the search input field and submits the search
-    //Returns the WikipediaSearchResultsPage object
     public WikipediaSearchResultsPage performSearch(String searchPhrase) {
         DomElement searchInput = findOnPage(SEARCH_INPUT_FINDER);   //Find the search input element after ensuring it's present
         searchInput.sendKeys(searchPhrase);   //Input the desired phrase to search
         searchInput.submit();  //Submit the form the input belongs to
 
+        //Returns the WikipediaSearchResultsPage object
         return new WikipediaSearchResultsPage();
     }
     
     //Finds the search input element on the page
-    //Returns the DomElement representing the search input
     public DomElement getSearchInput() {
+        //Returns the DomElement representing the search input
         return findOnPage(SEARCH_INPUT_FINDER);
     }
 
     //Finds the search button element on the page
-    //Returns the DomElement representing the search button
     public DomElement getSearchButton() {
+        //Returns the DomElement representing the search button
         return findOnPage(SEARCH_BUTTON_FINDER);
     }
 }

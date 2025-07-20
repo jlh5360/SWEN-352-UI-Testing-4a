@@ -30,12 +30,12 @@ public class WikipediaSearchResultsPage extends AbstractPage {
     }
 
     //Gets a list of all search result view objects on the page
-    //Returns a list of WikipediaSearchResultView objects
     public List<WikipediaSearchResultView> getSearchResults() {
         //Find the search results list element after ensuring it's present
         DomElement searchResultsList = findOnPage(SEARCH_RESULTS_LIST_FINDER);
 
         //Get the search results list and collect all the individual result together
+        //Returns a list of WikipediaSearchResultView objects
         return searchResultsList.findChildrenBy(SEARCH_RESULT_ITEM_FINDER)
                 .stream()
                 .map(WikipediaSearchResultView::new)
@@ -43,8 +43,8 @@ public class WikipediaSearchResultsPage extends AbstractPage {
     }
     
     //Checks if the search results are empty
-    //Returns true if there are no search results, false otherwise
     public boolean areSearchResultsEmpty() {
+        //Returns true if there are no search results, false otherwise
         return getSearchResults().isEmpty();
     }
 }
