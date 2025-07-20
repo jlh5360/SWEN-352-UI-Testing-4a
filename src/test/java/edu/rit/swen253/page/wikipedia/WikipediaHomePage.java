@@ -1,6 +1,7 @@
 package edu.rit.swen253.page.wikipedia;
 
 import edu.rit.swen253.page.AbstractPage;
+import edu.rit.swen253.utils.DomElement;
 import edu.rit.swen253.utils.SeleniumUtils;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -27,5 +28,13 @@ public class WikipediaHomePage extends AbstractPage {
 
     public static WikipediaHomePage navigateTo() {
         return SeleniumUtils.getInstance().navigateToPage(WIKIPEDIA_URL, WikipediaHomePage::new);
+    }
+    
+    public DomElement getSearchInput() {
+        return findOnPage(SEARCH_INPUT_FINDER);
+    }
+
+    public DomElement getSearchButton() {
+        return findOnPage(SEARCH_BUTTON_FINDER);
     }
 }
