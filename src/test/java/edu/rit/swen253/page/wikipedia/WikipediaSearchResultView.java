@@ -28,6 +28,7 @@ public class WikipediaSearchResultView {
     
     public SimplePage clickResult() {
         resultElement.findChildBy(HEADING_FINDER).click();
+        
         return new SimplePage();
     }
 }
