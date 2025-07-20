@@ -26,6 +26,12 @@ public class WikipediaSearchTest extends AbstractWebTest {
     private WikipediaHomePage wikipediaHomePage;
     private WikipediaSearchResultsPage wikipediaSearchResultsPage;
 
+    //ANSI escape codes for coloring terminal output
+    private static final String ANSI_RESET = "\u001B[0m";   //Resets color to default
+    private static final String ANSI_GREEN = "\u001B[32m";  // Green for result
+    private static final String ANSI_YELLOW = "\u001B[33m";   //Yellow for title
+    private static final String ANSI_CYAN = "\u001B[36m";   //Cyan for URL
+
     @Test
     @Order(1)
     @DisplayName("Navigate to Wikipedia Home Page")
@@ -54,7 +60,12 @@ public class WikipediaSearchTest extends AbstractWebTest {
 
         for (int i = 0; i < searchResults.size(); i++) {
             WikipediaSearchResultView result = searchResults.get(i);
-            logger.info(String.format("  Result %d: Title='%s', URL='%s'", i + 1, result.getTitle(), result.getUrl()));
+            
+            //Log with ANSI colors to easily see what to look for
+            logger.info(String.format("  %sResult %s%s: %sTitle='%s'%s, %sURL='%s'%s",
+                    ANSI_GREEN, (i + 1), ANSI_RESET,   //Result in green
+                    ANSI_YELLOW, result.getTitle(), ANSI_RESET,   //Title in yellow
+                    ANSI_CYAN, result.getUrl(), ANSI_RESET));   //URL in cyan
         }
     }
 }
