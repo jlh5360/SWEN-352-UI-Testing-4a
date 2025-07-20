@@ -28,6 +28,9 @@ public class WikipediaSearchTest extends AbstractWebTest {
 
     //ANSI escape codes for coloring terminal output
     private static final String ANSI_RESET = "\u001B[0m";   //Resets color to default
+    private static final String ANSI_RED = "\u001B[31m";   //Red for result
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_ORANGE = "\033[38;2;255;165;0m";   //Orange for result
     private static final String ANSI_GREEN = "\u001B[32m";  // Green for result
     private static final String ANSI_YELLOW = "\u001B[33m";   //Yellow for title
     private static final String ANSI_CYAN = "\u001B[36m";   //Cyan for URL
@@ -50,11 +53,13 @@ public class WikipediaSearchTest extends AbstractWebTest {
     void performSearchAndListResults() {
         assertNotNull(wikipediaHomePage, "Wikipedia Home Page should be initialized from previous step.");
         
+        logger.info(String.format("%sPerforming search for: %s'%s'", ANSI_BLUE, ANSI_RESET, SEARCH_PHRASE));
         wikipediaSearchResultsPage = wikipediaHomePage.performSearch(SEARCH_PHRASE);
         
         assertNotNull(wikipediaSearchResultsPage, "Search results page should be loaded.");
         assertFalse(wikipediaSearchResultsPage.areSearchResultsEmpty(), "Search results should not be empty.");
 
+        logger.info(String.format("%sRetrieving search results...%s", ANSI_BLUE, ANSI_RESET));
         List<WikipediaSearchResultView> searchResults = wikipediaSearchResultsPage.getSearchResults();
         assertFalse(searchResults.isEmpty(), "Search results should not be empty.");
 
