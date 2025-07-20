@@ -1,7 +1,9 @@
 package edu.rit.swen253.test.wikipedia;
 
+import static edu.rit.swen253.utils.SeleniumUtils.getInstance;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -11,7 +13,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import edu.rit.swen253.page.SimplePage;
 import edu.rit.swen253.page.wikipedia.WikipediaHomePage;
 import edu.rit.swen253.page.wikipedia.WikipediaSearchResultView;
 import edu.rit.swen253.page.wikipedia.WikipediaSearchResultsPage;
@@ -53,7 +57,7 @@ public class WikipediaSearchTest extends AbstractWebTest {
     void performSearchAndListResults() {
         assertNotNull(wikipediaHomePage, "Wikipedia Home Page should be initialized from previous step.");
         
-        logger.info(String.format("%sPerforming search for: %s'%s'", ANSI_BLUE, ANSI_RESET, SEARCH_PHRASE));
+        logger.info(String.format("%sPerforming search for: '%s%s%s'", ANSI_BLUE, ANSI_RESET, ANSI_BLUE, SEARCH_PHRASE));
         wikipediaSearchResultsPage = wikipediaHomePage.performSearch(SEARCH_PHRASE);
         
         assertNotNull(wikipediaSearchResultsPage, "Search results page should be loaded.");
@@ -70,7 +74,45 @@ public class WikipediaSearchTest extends AbstractWebTest {
             logger.info(String.format("  %sResult %s%s: %sTitle='%s'%s, %sURL='%s'%s",
                     ANSI_GREEN, (i + 1), ANSI_RESET,   //Result in green
                     ANSI_YELLOW, result.getTitle(), ANSI_RESET,   //Title in yellow
-                    ANSI_CYAN, result.getUrl(), ANSI_RESET));   //URL in cyan
+                    ANSI_CYAN, result.getUrl(), ANSI_RESET   //URL in cyan
+                )
+            );
         }
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Click first search result and validate navigation")
+    void clickFirstSearchResultAndValidateNavigation() {
+        assertNotNull(wikipediaSearchResultsPage, "Wikipedia Search Results Page should be initialized from previous step.");
+
+        List<WikipediaSearchResultView> results = wikipediaSearchResultsPage.getSearchResults();
+        assertFalse(results.isEmpty(), "Search results should not be empty to click the first one.");
+
+        WikipediaSearchResultView firstResult = results.get(0);
+        String expectedTitle = firstResult.getTitle();
+        String expectedUrlContains = firstResult.getUrl();   //Partial URL validation
+
+        logger.info(String.format("%sClicking the first search result: '%s%s%s'%s",
+                ANSI_BLUE, ANSI_RESET, expectedTitle, ANSI_BLUE, ANSI_RESET
+            )
+        );
+        SimplePage targetPage = firstResult.clickResult();
+
+        //Wait for the URL to change to indicate navigation
+        getInstance().getLongWait().until(ExpectedConditions.urlContains(expectedUrlContains));
+
+        String actualTitle = targetPage.getTitle();
+        String actualUrl = targetPage.getURL();
+
+        logger.info(String.format("%sNavigated to page. %sActual Title: '%s'%s, %sActual URL: '%s'%s",
+                ANSI_BLUE,
+                ANSI_YELLOW, actualTitle, ANSI_RESET,
+                ANSI_CYAN, actualUrl, ANSI_RESET
+            )
+        );
+
+        //Assertions for validation
+        assertTrue(actualUrl.contains(expectedUrlContains), "Navigated URL should contain the expected URL segment.");
     }
 }
