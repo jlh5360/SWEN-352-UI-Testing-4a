@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 //Page Object for the Wikipedia Home Page
 public class WikipediaHomePage extends AbstractPage {
@@ -39,6 +40,12 @@ public class WikipediaHomePage extends AbstractPage {
         DomElement searchInput = findOnPage(SEARCH_INPUT_FINDER);   //Find the search input element after ensuring it's present
         searchInput.sendKeys(searchPhrase);   //Input the desired phrase to search
         searchInput.submit();  //Submit the form the input belongs to
+        
+        //Need to wait for an element on the search results page to be visible
+        //This is crucial to resolving/avoiding the StaleElementReferenceException error
+        //                                                          ^
+        //org.openqa.selenium.StaleElementReferenceException: stale element reference: stale element not found
+        SeleniumUtils.getInstance().getLongWait().until(ExpectedConditions.presenceOfElementLocated(WikipediaSearchResultsPage.SEARCH_RESULTS_LIST_FINDER));
 
         //Returns the WikipediaSearchResultsPage object
         return new WikipediaSearchResultsPage();
