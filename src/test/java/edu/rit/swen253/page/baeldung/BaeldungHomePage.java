@@ -20,6 +20,10 @@ public class BaeldungHomePage extends AbstractPage {
    */
   private static final By MAIN_CONTENT_FINDER =
     By.cssSelector("body.home > #wrap");
+  private static final By SEARCH_BUTTON_FINDER =
+    By.id("menu-item-196804");
+  private static final By SEARCH_BAR_FINDER =
+    By.id("search");
 
   private DomElement mainContentPanel;
 
@@ -28,18 +32,18 @@ public class BaeldungHomePage extends AbstractPage {
     // validate basic page structure
     try {
       mainContentPanel = findOnPage(MAIN_CONTENT_FINDER);
+      
     } catch (TimeoutException e) {
       fail("Main content panel not found");
     }
   }
 
-  public SearchButton getSearchButton() {
-    //return new SearchButton(mainContentPanel.findChildBy(By.cssSelector("nav.header--menu > div.container.menu-container > div.container-inner > #menu-main-menu > li.nav--menu_item.menu-search > #menu-item-196804")));
-    return new SearchButton(mainContentPanel.findChildBy(By.cssSelector("nav.header--menu > div.container.menu-container > div.container-inner > #menu-main-menu > li.nav--menu_item.menu-search")));
+
+  public BaeldungSearchButton getSearchButton() {
+    return new BaeldungSearchButton(findOnPage(SEARCH_BUTTON_FINDER));
   }
 
-  public Searchbar getSearchbar() {
-    //return new SearchButton(mainContentPanel.findChildBy(By.cssSelector("nav.header--menu > div.container.menu-container > div.container-inner > #menu-main-menu > li.nav--menu_item.menu-search > #menu-item-196804")));
-    return new Searchbar(mainContentPanel.findChildBy(By.cssSelector("#big-nav > div.container > div.big-nav-content.-sections_hidden > div.row.search-row > #menu-search > form.form-inline > fieldset > div.input-group > #search")));
+  public BaeldungSearchbar getSearchbar() {
+    return new BaeldungSearchbar(findOnPage(SEARCH_BAR_FINDER));
   }
 }

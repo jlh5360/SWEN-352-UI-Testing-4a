@@ -6,13 +6,13 @@ import edu.rit.swen253.utils.DomElement;
     /*
      * <input name="s" id="search" placeholder="Search" value="" class="form-control" type="text">
      */
-public class Searchbar {
+public class BaeldungSearchbar {
 
     private final DomElement viewContainer;
     /**
     * The View container is the input that contains the search.
     */
-    public Searchbar(final DomElement viewContainer) {
+    public BaeldungSearchbar(final DomElement viewContainer) {
         this.viewContainer = viewContainer;
     }
 

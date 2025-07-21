@@ -2,8 +2,6 @@ package edu.rit.swen253.page.baeldung;
 
 import edu.rit.swen253.utils.DomElement;
 
-import static edu.rit.swen253.utils.HtmlUtils.ANCHOR_FINDER;
-
     /**
      * A View Object that contains a search button in Home page.
      *
@@ -13,13 +11,13 @@ import static edu.rit.swen253.utils.HtmlUtils.ANCHOR_FINDER;
      *      </svg>
      * </a>
      */
-public class SearchButton {
+public class BaeldungSearchButton {
     private final DomElement link;
     /**
     * The View container is the li that holds the link {@code <li><a> ...LINK... </a></li>}.
     */
-    public SearchButton(final DomElement viewContainer) {
-        this.link = viewContainer.findChildBy(ANCHOR_FINDER);
+    public BaeldungSearchButton(final DomElement viewContainer) {
+        this.link = viewContainer;
     }
 
     public void clickLink() {
