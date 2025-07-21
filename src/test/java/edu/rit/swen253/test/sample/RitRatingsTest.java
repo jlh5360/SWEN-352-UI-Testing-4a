@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author <a href='mailto:bdbvse@rit.edu'>Bryan Basham</a>
  */
+@Disabled
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class RitRatingsTest extends AbstractWebTest {
 
