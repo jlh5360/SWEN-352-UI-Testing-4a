@@ -99,7 +99,7 @@ class BaeldungCaseStudyTest extends AbstractWebTest {
   void displaySearchResults() {
     searchResults = searchResultsPage.getSearchResults();
     for (BaeldungSearchResultView baeldungSearchResultView : searchResults) {
-      logger.info(String.format("%sTitle: %s, %sURL: %s%s", 
+      logger.info(String.format("\n%sTitle: %s\n%sURL: %s%s", 
         ANSI_BLUE,
         baeldungSearchResultView.getTitle(), 
         ANSI_RED,
@@ -114,7 +114,7 @@ class BaeldungCaseStudyTest extends AbstractWebTest {
   void clickFirstSearchResult() {
     String title = searchResults.get(0).getTitle();
     String url = searchResults.get(0).getURL();
-    
+
     searchResults.get(0).clickLink();
 
     searchResultsPage.waitUntilGone();
