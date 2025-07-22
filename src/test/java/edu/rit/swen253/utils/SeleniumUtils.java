@@ -162,7 +162,7 @@ public final class SeleniumUtils {
    *
    * @return WebDriver (ChromeDriver or FirefoxDriver)
    */
-  private WebDriver buildDriver() {
+  public WebDriver buildDriver() {
     // create essential browser capabilities
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
