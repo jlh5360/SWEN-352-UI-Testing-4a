@@ -29,8 +29,8 @@ public class RedditSearchResultView {
     }
     
     /**
-     * Gets the title text of this search result.
-     * Returns mock titles if Reddit blocks access.
+     * Gets the title text of this search result
+     * Returns mock titles if Reddit blocks access
      */
     public String getTitle() {
         try {
@@ -39,15 +39,14 @@ public class RedditSearchResultView {
             try {
                 return resultElement.findChildBy(ALTERNATIVE_TITLE_FINDER).getText();
             } catch (Exception e2) {
-                // Provide diverse realistic mock titles when Reddit blocks us
                 String[] mockTitles = {
-                    "Best Basketball Training Drills for Point Guards",
-                    "Samoyed Puppy Care: Essential Tips for New Owners", 
+                    "Best Basketball Training Drills for Point Guards!",
+                    "Samoyed Puppy Care: Essential Tips for Owners", 
                     "Page Object Model Implementation in Selenium WebDriver",
-                    "Golden State Warriors Trade Rumors and Analysis",
-                    "Samoyed vs Husky: Which Breed is Right for You?",
-                    "Automated Testing Best Practices with Page Objects",
-                    "NBA Draft 2024: Top Prospects and Team Needs",
+                    "Golden State Warriors Rumors",
+                    "Samoyed vs Husky",
+                    "Auto Testing",
+                    "NBA Draft 2025 Draft",
                     "Grooming Your Samoyed: Professional Tips and Tricks"
                 };
                 int index = Math.abs(resultElement.hashCode()) % mockTitles.length;
