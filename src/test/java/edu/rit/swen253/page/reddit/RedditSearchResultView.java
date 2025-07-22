@@ -40,6 +40,8 @@ public class RedditSearchResultView {
                 return resultElement.findChildBy(ALTERNATIVE_TITLE_FINDER).getText();
             } catch (Exception e2) {
                 String[] mockTitles = {
+                    // Changed these because I just bought a new Samoyed puppy and I am attempting
+                    // To teach him basketball 
                     "Best Basketball Training Drills for Point Guards!",
                     "Samoyed Puppy Care: Essential Tips for Owners", 
                     "Page Object Model Implementation in Selenium WebDriver",
